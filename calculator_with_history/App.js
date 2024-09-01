@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+
 import { Button, StyleSheet, Text, View, TextInput, Alert } from 'react-native';
 import { useState } from 'react';
 
@@ -19,25 +19,24 @@ export default function App() {
     <View style={styles.container}>
       <Text>This is an calculator app</Text>
       <Text>Result: {result}</Text>
-      <View>
-        <TextInput
-          placeholder='Enter number 1'
-          onChangeText={number1 => setNumber1(parseFloat(number1))}
-          value={number1}
-          keyboardType='numeric'
-        />
-        <TextInput
-          placeholder='Enter number 2'
-          onChangeText={number2 => setNumber2(parseFloat(number2))}
-          value={number2}
-          keyboardType='numeric'
-        />
-      </View>
-      <View>
+      <TextInput
+        style={styles.textInput}
+        placeholder='Enter number 1'
+        onChangeText={number1 => setNumber1(parseFloat(number1))}
+        value={number1}
+        keyboardType='numeric'
+      />
+      <TextInput
+        style={styles.textInput}
+        placeholder='Enter number 2'
+        onChangeText={number2 => setNumber2(parseFloat(number2))}
+        value={number2}
+        keyboardType='numeric'
+      />
+      <View style={styles.buttonContainer}>
         <Button onPress={buttonAddPressed} title="+" />
         <Button onPress={buttonMinusPressed} title="-" />
       </View>
-      <StatusBar style="auto" />
     </View>
   );
 }
@@ -47,6 +46,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 50,
   },
+  buttonContainer: {
+    flex: 2,
+    width: 150,
+    flexDirection: "row",
+    alignItems: "flex-center",
+    justifyContent: 'space-around',
+    padding: 20,
+  },
+  textInput: {
+    fontsize: 18,
+    width: 200,
+    borderColor: "gray",
+    borderWidth: 1,
+  }
 });
