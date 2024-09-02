@@ -1,35 +1,53 @@
 
-import { Button, StyleSheet, Text, View, TextInput, Alert } from 'react-native';
-import { useState } from 'react';
+import { Button, StyleSheet, Text, View, TextInput, Alert, FlatList, Keyboard } from 'react-native';
+import { useState, useEffect } from 'react';
+import ListEmptyComponent from './ListEmptyComponent';
 
 export default function App() {
-  const buttonAddPressed = () => {
-    Alert.alert("Button pressed");
-    setResult(number1 + number2)
-  };
-  const buttonMinusPressed = () => {
-    Alert.alert("Button pressed");
-    setResult(number1 - number2)
-  };
   const [number1, setNumber1] = useState("");
   const [number2, setNumber2] = useState("");
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState(null);
+  const [history, setHistory] = useState([])
+  const buttonAddPressed = () => {
+    const num1 = parseFloat(number1) || 0;
+    const num2 = parseFloat(number2) || 0;
+    const result = num1 + num2;
+    // Alert.alert("Button pressed");
+    setResult(result)
+    setHistory(prev => [...prev, { key: String(prev.length + 1), text: `${number1} + ${number2} = ${result}` }]);
+    setNumber1("");
+    setNumber2("");
+    Keyboard.dismiss();
+  };
+  const buttonMinusPressed = () => {
+    const num1 = parseFloat(number1) || 0;
+    const num2 = parseFloat(number2) || 0;
+    const result = num1 - num2;
+    // Alert.alert("Button pressed");
+    setResult(result)
+    setHistory(prev => [...prev, { key: String(prev.length + 1), text: `${number1} - ${number2} = ${result}` }]);
+    //hong hieu String(prev.length + 1)
+    setNumber1("");
+    setNumber2("");
+    Keyboard.dismiss();
+  };
+
 
   return (
     <View style={styles.container}>
       <Text>This is an calculator app</Text>
-      <Text>Result: {result}</Text>
+      <Text>Result: {result !== null ? result : "No calculation yet"}</Text>
       <TextInput
         style={styles.textInput}
         placeholder='Enter number 1'
-        onChangeText={number1 => setNumber1(parseFloat(number1))}
+        onChangeText={number1 => setNumber1(number1)}
         value={number1}
         keyboardType='numeric'
       />
       <TextInput
         style={styles.textInput}
         placeholder='Enter number 2'
-        onChangeText={number2 => setNumber2(parseFloat(number2))}
+        onChangeText={number2 => setNumber2(number2)}
         value={number2}
         keyboardType='numeric'
       />
@@ -37,6 +55,14 @@ export default function App() {
         <Button onPress={buttonAddPressed} title="+" />
         <Button onPress={buttonMinusPressed} title="-" />
       </View>
+      <Text>History</Text>
+      <FlatList
+        data={history}
+        renderItem={({ item }) => (<Text style={styles.historyItem}>{item.text}</Text>)}
+        ListEmptyComponent={ListEmptyComponent}
+        keyExtractor={item => item.key}
+      //hong hieu
+      />
     </View>
   );
 }
@@ -50,7 +76,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   buttonContainer: {
-    flex: 2,
+    flex: 1,
     width: 150,
     flexDirection: "row",
     alignItems: "flex-center",
@@ -58,9 +84,16 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   textInput: {
-    fontsize: 18,
+    flex: 1,
+    fontSize: 18,
     width: 200,
     borderColor: "gray",
     borderWidth: 1,
+  },
+  historyItem: {
+    flex: 5,
+    paddingVertical: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
   }
 });
