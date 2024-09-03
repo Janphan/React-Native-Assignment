@@ -1,14 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, Text, View, Button, TextInput, FlatList, Alert } from 'react-native';
+import ListEmptyComponent from './ListEmptyComponent';
 
 export default function App() {
   const [toshop, setToShop] = useState("");
+  const [shoplist, setShoplist] = useState([]);
+
   const handleAdd = () => {
     Alert.alert("Button pressed")
+    setShoplist([...shoplist, { key: String(shoplist.length), content: toshop }]);
+    setToShop("");
+    console.log(shoplist);
   }
   const handleClear = () => {
     Alert.alert("Button pressed")
+    setShoplist([]);
   }
   return (
     <View style={styles.container}>
@@ -26,6 +33,13 @@ export default function App() {
         <Button
           onPress={handleClear} title="Clear" />
       </View>
+      <View style={styles.list}>
+        <FlatList
+          data={shoplist}
+          renderItem={(item) => <Text>{item.content}</Text>}
+          ListEmptyComponent={ListEmptyComponent}
+        />
+      </View>
     </View>
   );
 }
@@ -39,11 +53,15 @@ const styles = StyleSheet.create({
     padding: 50,
   },
   inputStyle: {
-    flext: 1,
+    flex: 1,
     padding: 50,
   },
   buttonContainer: {
     flex: 1,
-    padding: 50,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  list: {
+    flex: 5,
   }
 });
