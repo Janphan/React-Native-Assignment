@@ -8,13 +8,18 @@ export default function App() {
   const [shoplist, setShoplist] = useState([]);
 
   const handleAdd = () => {
-    Alert.alert("Button pressed")
-    setShoplist([...shoplist, { key: String(shoplist.length), content: toshop }]);
-    setToShop("");
-    console.log(shoplist);
+    // Alert.alert("Button pressed")
+    if (toshop.trim().length > 0) {
+      setShoplist([...shoplist, { key: String(shoplist.length), content: toshop }]);
+      setToShop("");
+      console.log(shoplist);
+    } else {
+      Alert.alert("Error", "Please enter a valid item");
+    }
+
   }
   const handleClear = () => {
-    Alert.alert("Button pressed")
+    // Alert.alert("Button pressed")
     setShoplist([]);
   }
   return (
@@ -36,7 +41,7 @@ export default function App() {
       <View style={styles.list}>
         <FlatList
           data={shoplist}
-          renderItem={(item) => <Text>{item.content}</Text>}
+          renderItem={({ item }) => <Text>{item.content}</Text>}
           ListEmptyComponent={ListEmptyComponent}
         />
       </View>
