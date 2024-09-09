@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, FlatList, Alert, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, Pressable, TextInput, FlatList, Alert, Keyboard } from 'react-native';
 import ListEmptyComponent from './ListEmptyComponent';
 
 export default function App() {
@@ -36,10 +36,26 @@ export default function App() {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button
-          onPress={handleAdd} title="Add" />
-        <Button
-          onPress={handleClear} title="Clear" />
+        <Pressable
+          style={({ pressed }) => [
+            styles.buttonContainer, {
+              backgroundColor: pressed ? "darked" : "blue"
+            },
+          ]}
+          onPress={handleAdd}
+        >
+          <Text style={styles.buttonText}>Add</Text>
+        </Pressable>
+        <Pressable
+          style={({ pressed }) => [
+            styles.buttonContainer, {
+              backgroundColor: pressed ? "darked" : "red"
+            },
+          ]}
+          onPress={handleClear}
+        >
+          <Text style={styles.buttonText}>Clear</Text>
+        </Pressable>
       </View>
       <View style={styles.list}>
         <FlatList
@@ -73,6 +89,15 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
   },
   list: {
     flex: 5,
