@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View, TextInput, Alert, FlatList, Keyboard } from 'react-native';
+import { Button, StyleSheet, Text, View, TextInput, Keyboard, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 
 export default function Calculator({ navigation }) {
@@ -29,9 +29,12 @@ export default function Calculator({ navigation }) {
         setNumber2("");
         Keyboard.dismiss();
     }
+    const handleClear = () => {
+        setHistory([]);
+    }
     return (
         <View style={styles.container}>
-            <Text>This is an calculator app</Text>
+            <Text style={styles.title}>This is an calculator app</Text>
             <Text>Result: {result !== null ? result : "No calculation yet"}</Text>
             <TextInput
                 style={styles.textInput}
@@ -47,10 +50,20 @@ export default function Calculator({ navigation }) {
                 value={number2}
                 keyboardType='numeric'
             />
-            <View style={styles.buttonContainer}>
-                <Button onPress={buttonAddPressed} title="+" />
-                <Button onPress={buttonMinusPressed} title="-" />
-                <Button onPress={() => navigation.navigate("History", { history })} title="History" />
+            <View style={styles.buttonContainer} >
+                <TouchableOpacity onPress={buttonAddPressed} style={styles.rectButton}>
+                    <Text style={styles.buttonText}>+</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={buttonMinusPressed} style={styles.rectButton}>
+                    <Text style={styles.buttonText}>-</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("History", { history })} style={styles.rectButton}>
+                    <Text style={styles.buttonText}>History</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleClear} style={styles.rectButton}>
+                    <Text style={styles.buttonText}>Clear</Text>
+                </TouchableOpacity>
+
                 {/* navigate to the history screen */}
                 {/* {history}  ???????????*/}
             </View>
@@ -66,19 +79,39 @@ const styles = StyleSheet.create({
         marginTop: 50,
     },
     buttonContainer: {
-        flex: 1,
-        width: 150,
+        flex: 3,
         flexDirection: "row",
-        alignItems: "flex-center",
-        justifyContent: 'space-around',
-        padding: 20,
+        alignItems: "center",
+        justifyContent: 'space-between', // Adjust spacing between buttons
+        width: '100%', // Adjust width to fit buttons and provide spacing
+        padding: 10,
+        marginBottom: 256,
+    },
+    rectButton: {
+        backgroundColor: '#1E90FF', // Button background color
+        width: 80, // Fixed width for the button
+        height: 40, // Fixed height for the button
+        borderRadius: 5, // Optional: for slightly rounded corners
+        justifyContent: 'center',
+        alignItems: "center",
+        margin: 5, // Optional: space around the button
     },
     textInput: {
-        flex: 1,
         fontSize: 18,
         width: 200,
         borderColor: "gray",
         borderWidth: 1,
-        margin: 50,
+        margin: 10,
+        padding: 5,
+    },
+    buttonText: {
+        color: 'white', // Text color
+        fontSize: 18, // Font size
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 10,
     },
 });
