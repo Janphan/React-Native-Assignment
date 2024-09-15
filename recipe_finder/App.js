@@ -1,41 +1,36 @@
-import { StyleSheet, Text, TextInput, View, Button, FlatList, Image, Keyboard } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, FlatList, Image, Keyboard, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
-import ListEmptyComponent from './ListEmptyComponent';
+import RecipeList from './RecipeList';
+
 import { getRecipe } from './recipeAPI';
 
 export default function App() {
   const [recipe, setRecipe] = useState("");
   const [recipeList, setRecipeList] = useState([]);
+  const [loading, setLoading] = useState(false)
 
   // https://www.themealdb.com/api/json/v1/1/filter.php?i=tomato
   const hanleFetch = () => {
+    setLoading(true)
     getRecipe(recipe)
       .then(data => setRecipeList(data.meals))
       .catch(err => console.error(err))
+      .finally(() => setLoading(false))
     Keyboard.dismiss()
+    setRecipe("")
   }
   return (
     <View style={styles.container}>
-      <Text>This is a recipe finder App</Text>
+      <Text style={styles.header}>Recipe finder App</Text>
       <TextInput
         placeholder='Enter recipe'
         value={recipe}
         onChangeText={text => setRecipe(text)}
+        style={styles.normalText}
       />
       <Button title="Search" onPress={hanleFetch} />
-      <FlatList
-        data={recipeList}
-        renderItem={({ item }) => (
-          <View>
-            <Text>{item.strMeal}</Text>
-            <Image
-              source={{ uri: item.strMealThumb }}
-              style={styles.imgStyle}
-            />
-          </View>
-        )}
-        ListEmptyComponent={ListEmptyComponent}
-      />
+      <ActivityIndicator size="small" animating={loading} />
+      <RecipeList recipeList={recipeList} />
     </View>
   );
 }
@@ -48,8 +43,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 50,
   },
-  imgStyle: {
-    width: 200,
-    height: 200,
+  header: {
+    fontSize: 16,
+    fontFamily: "bold",
   },
+  normalText: {
+    fontSize: 16,
+  }
 });
