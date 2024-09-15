@@ -7,3 +7,5 @@ React Native Assignments
 
 3. Number guessing game
 4. Shopping list
+5. Recipe finder
+6. Euro converter
