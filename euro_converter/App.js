@@ -8,7 +8,7 @@ export default function App() {
   const [amount, setAmount] = useState("");
   const [result, setResult] = useState("");
   const [currencies, setCurrencies] = useState([]);  // List of available currencies
-  const [selectedCurrency, setSelectedCurrency] = useState();  // The selected currency
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");  // The selected currency
 
   // Fetch currency rates from API
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function App() {
       Alert.alert('Error', 'Please enter an amount to convert.');
       return;
     }
-    convertCurrency(amount, selectedCurrency, "EUR")
+    convertCurrency(amount, "EUR", selectedCurrency)
       .then(convertedValue => {
         setResult(convertedValue);
       })
@@ -51,11 +51,11 @@ export default function App() {
           ))}
         </Picker>
       </View>
-      <View>
+      <View style={styles.buttonContainer}>
         <Button title="Convert" onPress={handleConvert} />
         {result && (
           <Text style={styles.result}>
-            {amount} {selectedCurrency} = {result} EUR
+            {amount} EUR = {result} {selectedCurrency}
           </Text>
         )}
       </View>
@@ -71,5 +71,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 150,
+  },
+  buttonContainer: {
+    flex: 1,
   },
 });
