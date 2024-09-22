@@ -57,9 +57,7 @@ export default function App() {
           onPress={handleShow}
         />
       </View>
-      <View >
-        <MyMap region={region} marker={marker} />
-      </View>
+      <MyMap region={region} marker={marker} />
 
     </View>
   );
