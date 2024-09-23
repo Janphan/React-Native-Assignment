@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Button, TextInput, Keyboard, Alert } from 'react-native';
 import MyMap from './MyMap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getAddress } from './mapAPI';
+import * as Location from 'expo-location';
 
 
 export default function App() {
@@ -14,7 +15,33 @@ export default function App() {
     latitudeDelta: 0.0322,
     longitudeDelta: 0.0221,
   })
+  const [currentLocation, setCurentLocation] = useState(null);
+  // State where location is saved
 
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('No permission to get location')
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setCurentLocation(location);
+      const { latitude, longitude } = location.coords;
+      setRegion({
+        latitude: latitude,
+        longitude: longitude,
+        latitudeDelta: 0.0322,
+        longitudeDelta: 0.0221,
+      });
+      setMarker({
+        latitude: latitude,
+        longitude: longitude,
+        title: 'Current Location',
+        color: "yellow",
+      });
+    })();
+  }, []);
   const handleShow = async () => {
     try {
       data = await getAddress(address)

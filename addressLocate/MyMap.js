@@ -1,6 +1,7 @@
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { StyleSheet, View, Text } from 'react-native';
 import { useState } from 'react';
+
 export default function MyMap({ region, marker }) {
     // Create a state for region
 
