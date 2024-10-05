@@ -14,6 +14,9 @@ export default function App() {
         { fields: [Contacts.Fields.PhoneNumbers] }
       );
       if (data.length > 0) {
+        console.log(data)
+        // console.log(Object.keys(data[10]).phoneNumbers)
+        console.log("Contact data: ", data[0]);
         setContacts(data);
         // setContact(data[0]);
       }
@@ -23,8 +26,20 @@ export default function App() {
     <View style={styles.container}>
       <FlatList
         data={contacts}
-        renderItem={({ item }) => <Text>{item.name}</Text>
-        }
+        keyExtractor={(item) => item.id} // Use 'id' as the key
+        renderItem={({ item }) => (
+          <View style={{ padding: 10, borderBottomColor: '#ccc', borderBottomWidth: 1 }}>
+            {/* Display the contact name */}
+            <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+
+            {/* Display the phone numbers if available */}
+            {item.phoneNumbers && item.phoneNumbers.map((phone, index) => (
+              <Text key={index} style={{ color: 'gray' }}>
+                {phone.label}: {phone.number}
+              </Text>
+            ))}
+          </View>
+        )}
       />
       <Button title="Get Contact" onPress={getContacts} />
       <StatusBar style="auto" />
