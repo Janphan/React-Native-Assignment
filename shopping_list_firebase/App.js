@@ -4,6 +4,9 @@ import { StyleSheet, Text, View, Pressable, TextInput, FlatList, Alert, Keyboard
 import ListEmptyComponent from './ListEmptyComponent';
 import { app } from './firebaseConfig';
 import { getDatabase, ref, push, onValue, remove } from "firebase/database";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Header, Input, Button, Icon } from "react-native-elements";
+import LinearGradient from 'react-native-linear-gradient';
 
 const database = getDatabase(app);
 
@@ -53,56 +56,102 @@ export default function App() {
     })
   }, []);
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Simple shopping list app</Text>
-      <View style={styles.inputStyle}>
-        <TextInput
-          value={toshop.title}
-          onChangeText={text => setToShop({ ...toshop, title: text })}
-          placeholder="Enter title"
-          style={styles.input}
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        <Header
+          backgroundImageStyle={{}}
+          barStyle="default"
+          centerComponent={{
+            text: "SHOPPING APP",
+            style: { color: "#fff" }
+          }}
+          centerContainerStyle={{}}
+          containerStyle={{ width: 350 }}
+          leftContainerStyle={{}}
+          linearGradientProps={{}}
+          placement="center"
+          rightContainerStyle={{}}
+          statusBarProps={{}}
         />
-        <TextInput
-          value={toshop.amount}
-          onChangeText={text => setToShop({ ...toshop, amount: text })}
-          placeholder="Enter amount"
-          style={styles.input}
-        />
-      </View>
-      <View style={styles.buttonContainer}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.buttonContainer, {
-              backgroundColor: pressed ? "darkblue" : "blue"
-            },
-          ]}
-          onPress={handleSave}
-        >
-          <Text style={styles.buttonText}>Save</Text>
-        </Pressable>
-        <Pressable
-          style={({ pressed }) => [
-            styles.buttonContainer, {
-              backgroundColor: pressed ? "darkblue" : "red"
-            },
-          ]}
-          onPress={handleClear}
-        >
-          <Text style={styles.buttonText}>Clear</Text>
-        </Pressable>
-      </View>
-      <View style={styles.list}>
-        <FlatList
-          data={shoplist}
-          renderItem={({ item }) =>
-            <View style={{ flexDirection: "row" }}>
-              <Text style={{ fontSize: 18 }}>{item.title}, {item.amount}</Text>
-              <Text style={{ fontSize: 18, color: "red" }} onPress={() => handleDelete(item.id)}> Delete</Text>
-            </View>}
+        <View style={styles.inputStyle}>
+          <Input
+            containerStyle={styles.input}
+            disabledInputStyle={{ background: "#ddd" }}
+            inputContainerStyle={{}}
+            inputStyle={{}}
+            label="Product"
+            labelStyle={{}}
+            labelProps={{}}
+            value={toshop.title}
+            onChangeText={text => setToShop({ ...toshop, title: text })}
+            placeholder="Enter title"
+          />
+          <Input
+            containerStyle={styles.input}
+            disabledInputStyle={{ background: "#ddd" }}
+            inputContainerStyle={{}}
+            inputStyle={{}}
+            label="Amount"
+            labelStyle={{}}
+            labelProps={{}}
+            value={toshop.amount}
+            onChangeText={text => setToShop({ ...toshop, amount: text })}
+            placeholder="Enter amount"
+          />
+        </View>
+        <View style={styles.buttonContainer}>
+          <Button
+            buttonStyle={{ width: 150 }}
+            containerStyle={{ margin: 5 }}
+            disabledStyle={{
+              borderWidth: 2,
+              borderColor: "#00F"
+            }}
+            disabledTitleStyle={{ color: "#00F" }}
+            linearGradientProps={null}
+            icon={<Icon type="antdesign" name="save" size={15} color="#0FF" />}
 
-        />
+            iconContainerStyle={{ background: "#000" }}
+            loadingProps={{ animating: true }}
+            loadingStyle={{}}
+            onPress={handleSave}
+            title="Save"
+            titleProps={{}}
+            titleStyle={{ marginHorizontal: 5 }}
+          />
+          <Button
+            buttonStyle={{ width: 150, backgroundColor: "red" }}
+            containerStyle={{ margin: 5 }}
+            disabledStyle={{
+              borderWidth: 2,
+              borderColor: "#00F"
+            }}
+            disabledTitleStyle={{ color: "#00F" }}
+            linearGradientProps={null}
+            icon={<Icon type="antdesign" name="delete" size={15} color="#0FF" />}
+
+            iconContainerStyle={{ background: "#000" }}
+            loadingProps={{ animating: true }}
+            loadingStyle={{}}
+            onPress={handleClear}
+            title="Clear"
+            titleProps={{}}
+            titleStyle={{ marginHorizontal: 5 }}
+          />
+        </View>
+        <View style={styles.list}>
+          <FlatList
+            data={shoplist}
+            renderItem={({ item }) =>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={{ fontSize: 18 }}>{item.title}, {item.amount}</Text>
+                <Text style={{ fontSize: 18, color: "red" }} onPress={() => handleDelete(item.id)}> Delete</Text>
+              </View>}
+
+          />
+        </View>
       </View>
-    </View>
+    </SafeAreaProvider>
   );
 }
 
@@ -119,10 +168,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
   },
-  inputStyle: {
-    flex: 1,
-    padding: 50,
-  },
+
   buttonContainer: {
     flex: 1,
     flexDirection: "row",
@@ -140,11 +186,11 @@ const styles = StyleSheet.create({
   list: {
     flex: 5,
   },
+  inputStyle: {
+    paddingTop: 5,
+    width: "100%", // Make the input container take the full screen width
+  },
   input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    width: '100%',
-    borderRadius: 5,
+    width: '100%',  // Input takes full width
   },
 });
